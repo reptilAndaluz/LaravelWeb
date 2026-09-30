@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-<<<<<<< HEAD
+
 use App\Http\Controllers\MainController;
+
 
 class MainController extends Controller
 {
@@ -12,7 +13,6 @@ class MainController extends Controller
         return view('index');
     }
 }
-=======
 
 class MainController extends Controller
 {
@@ -28,4 +28,6 @@ class MainController extends Controller
         return view('index');
     }
 }
->>>>>>> master
+
+
+
