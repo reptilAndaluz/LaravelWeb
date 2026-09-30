@@ -1,10 +1,21 @@
 @extends('template.base')
+<<<<<<< HEAD
 
 @section('title')
 Github Project
 @endsection
 
 @section('content')
+=======
+<!-- directiva de blade, para indicar que se hereda de un documento  -->
+
+@section('title')
+GitHub Project
+@endsection
+
+@section('content')
+<!-- directiva para rellenar un espacio creado con yield -->
+>>>>>>> master
 <div class="container d-flex align-items-center flex-column">
     <!-- Masthead Avatar Image-->
     <img class="masthead-avatar mb-5" src="{{ asset('assets/img/avataaars.svg') }}" alt="..." />
@@ -16,8 +27,15 @@ Github Project
         <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
         <div class="divider-custom-line"></div>
     </div>
+<<<<<<< HEAD
             <!-- Masthead Subheading-->
     <p class="masthead-subheading font-weight-light mb-0">Graphic Artist - Web Designer - Illustrator</p>
 </div>
 @endsection
 
+=======
+    <!-- Masthead Subheading-->
+    <p class="masthead-subheading font-weight-light mb-0">Graphic Artist - Web Designer - Illustrator</p>
+</div>
+@endsection
+>>>>>>> master
