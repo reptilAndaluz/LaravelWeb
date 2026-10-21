@@ -1,4 +1,4 @@
-@extends('template.base')
+@extends('index')
 
 @section('title')
 GitHub Project
