@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Alumno extends Model
 {
@@ -11,6 +12,10 @@ class Alumno extends Model
 
     protected $table = 'alumno';
     
-    protected $filltable = ['nombre','apellido','fnac','genero','nacceso'];
+    // CORREGIDO: Cambiado $filltable por $fillable y 'apellido' por 'apellidos'
+    protected $fillable = ['nombre', 'apellidos', 'fnac', 'genero', 'nacceso'];
 
+    public function matriculas(): HasMany {
+        return $this->hasMany(Matricula::class);
+    }
 }
