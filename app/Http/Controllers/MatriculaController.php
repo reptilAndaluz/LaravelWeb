@@ -2,40 +2,41 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Alumno;
 use App\Models\Matricula;
 use App\Models\Modulo;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
 
 class MatriculaController extends Controller
 {
+    private const MESSAGES = [
+        'alumno_id.required' => 'El alumno es obligatorio',
+        'alumno_id.numeric' => 'El modulo no se ha seleccionado bien',
+        'alumno.exists' => 'El alumno no existe',
+        'modulo_id.required' => 'El modulo es obligatorio',
+        'modulo_id.numeric' => 'El modulo no se ha seleccionado bien',
+        'modulo.exists' => 'El modulo no existe',
+    ];
 
-    private function getCurso(): int{
-        // Si el mes es 9 o mayor, año actual; si no, año anterior
-        if(Carbon::now()->month >= 9){
-            return Carbon::now()->year;
-        }else{
-            return Carbon::now()->year - 1;
-        }
-    }
-
-
-    private function getCursoEscolar(): String{
-        return $this->getCurso() . '-' . $this->getCurso() + 1;
-    }
+    private const RULES = [
+        'alumno_id' => 'required|numeric|exists:alumno,id',
+        'modulo_id' => 'required|numeric|exists:modulo,id',
+    ];
 
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $lista=[
-            'uno'   =>   121,
-             121     => 'dos',
-            'tres'  =>  'cuatro'
-        ];
-        
+        $matriculas = Matricula::all();
+
+        // $matriculas= Matricula::orderBy('alfabeticamente')->get();
+        return view('matricula.index', [
+            'matriculas' => $matriculas,
+        ]);
+
     }
 
     /**
@@ -44,10 +45,9 @@ class MatriculaController extends Controller
     public function create(): View
     {
         return view('matricula.create', [
-            'alumno'        => Alumno::OrderBy('apellido')->orderBy('nombre')->get(),
+            'alumnos' => Alumno::orderBy('apellidos')->orderBy('nombre')->get(),
             'curso_escolar' => $this->getCursoEscolar(),
-            'modulos'       => Modulo::pluck('nombre','id'),
-
+            'modulos' => Modulo::pluck('nombre', 'id'),
         ]);
     }
 
@@ -56,7 +56,21 @@ class MatriculaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), self::RULES, self::MESSAGES);
+        if ($validator->fails()) {
+            return back()->withInput()->withErrors($validator);
+        }
+        $matricula = new Matricula($request->all());
+        $matricula->curso = $this->getCurso();
+        try {
+            $matricula->save();
+
+            return redirect()->route('matricula.create')->with(['success' => 'Se ha matriculado el alumno correctamente']);
+        } catch (\Exception $e) {
+            return back()->withInput()->withErrors([
+                'error' => 'Error al matricular.',
+            ]);
+        }
     }
 
     /**
