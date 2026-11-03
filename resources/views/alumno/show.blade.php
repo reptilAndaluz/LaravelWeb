@@ -29,6 +29,7 @@
                     <h4 class="card-title">{{ Carbon\Carbon::parse($alumno->fnac)->locale('es')->translatedFormat('j \d\e F \d\e Y') }}</h4>
                     <h4 class="card-title">{{ $alumno->genero }}</h4>
                     <h4 class="card-title">{{ $alumno->nacceso }}</h4>
+                    <a href="{{ route('alumno.matricular', $alumno) }}" class="btn btn-secondary">Matricular</a>
                     <a href="{{ route('alumno.index') }}" class="btn btn-secondary">Back</a>
                     <a href="{{ url()->previous() }}" class="btn btn-secondary">Back</a>
                 </div>

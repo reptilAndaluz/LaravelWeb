@@ -34,6 +34,7 @@
                         <td>
                             <a href="{{ route('alumno.show', $alumno) }}" class="btn btn-secondary">View</a>
                             <a href="{{ route('alumno.edit', $alumno) }}" class="btn btn-secondary">Edit</a>
+                            <a href="{{ route('alumno.matricular', $alumno) }}" class="btn btn-secondary">Matricular</a>
                             <!--<a href="{{ route('index') }}" class="btn btn-secondary">Delete</a>-->
                             <form data-message="{{ $alumno->apellidos . ', ' . $alumno->nombre }}" class="confirm-dialog" action="{{ route('alumno.destroy', $alumno) }}" method="post" style="display: inline;">
                                 @csrf
