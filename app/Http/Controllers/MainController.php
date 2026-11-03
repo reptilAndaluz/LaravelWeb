@@ -2,19 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class MainController extends Controller
 {
-    function about(): View {
+    public function about(): View
+    {
         return view('about');
     }
 
-    function array(): View {
-        //array prehistórico
-        $array1 = array();
-        //array actual
+    public function array(): View
+    {
+        // array prehistórico
+        $array1 = [];
+        // array actual
         $array2 = [];
         $array2[] = 'Juan';
         $array2[] = 'Pepe';
@@ -48,23 +49,26 @@ class MainController extends Controller
             ['nombre' => 'Villegas Rivera, Luis', 'edad' => 20],
         ];
         $grupo = 'Segundo de Desarrollo de Aplicaciones Web A';
+
         return view('array', ['grupo' => $grupo, 'alumnos' => $alumnos, 'profesor' => 'Carmelo Vega']);
     }
 
     /*function aboutMetodo(): View {
         return view('about');
     }*/
-    
-    function gestion(): View {
+
+    public function gestion(): View
+    {
         return view('gestion');
     }
 
-    function index(): View {
+    public function index(): View
+    {
         return view('index');
     }
 
-    function portfolio(): View {
-        return view('portfolio');
+    public function portfolio(): View
+    {
+        return view('main');
     }
-
 }
