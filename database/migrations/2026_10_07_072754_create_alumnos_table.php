@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('alumno', function (Blueprint $table) {
             $table->id();
-            $table->String('nombre', 100);
-            $table->String('apellido', 130);
+            $table->string('nombre', 100);
+            $table->string('apellidos', 130);
             $table->date('fnac')->nullable();
-            $table->enum('genero', ['M','F','O']);
-            $table->float('nacceso',4,2);
+            $table->enum('genero', ['masculino', 'femenino', 'otro'])->nullable();
+            $table->float('nacceso', 4, 2)->nullable();
             $table->timestamps();
         });
     }
