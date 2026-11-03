@@ -61,4 +61,42 @@ class ViewRoutesTest extends TestCase
         $response->assertSee(route('alumno.index'));
         $response->assertSee(route('modulo.index'));
     }
+
+    public function test_matricular_alumno_duplicate_returns_friendly_error(): void
+    {
+        $alumno = Alumno::create([
+            'nombre' => 'Ana',
+            'apellidos' => 'Gómez',
+            'fnac' => '2001-05-10',
+            'genero' => 'femenino',
+            'nacceso' => 9.0,
+        ]);
+
+        $modulo = Modulo::create([
+            'nombre' => 'Diseño Interfaces',
+            'abreviatura' => 'DIW',
+            'horas' => 6,
+            'creditos' => 8,
+        ]);
+
+        // Primera matrícula debe ser exitosa
+        $firstResponse = $this->post(route('matricula.store'), [
+            'alumno_id' => $alumno->id,
+            'modulo_id' => $modulo->id,
+        ]);
+        $firstResponse->assertSessionHas('success');
+
+        // Segunda matrícula duplicada en el mismo curso debe fallar con error descriptivo
+        $secondResponse = $this->from(route('alumno.matricular', $alumno))->post(route('matricula.store'), [
+            'alumno_id' => $alumno->id,
+            'modulo_id' => $modulo->id,
+        ]);
+        $secondResponse->assertSessionHasErrors(['error']);
+        $secondResponse->assertRedirect(route('alumno.matricular', $alumno));
+
+        // En la vista de matricular debe aparecer como ya matriculado
+        $viewResponse = $this->get(route('alumno.matricular', $alumno));
+        $viewResponse->assertStatus(200);
+        $viewResponse->assertSee('(Ya matriculado)');
+    }
 }

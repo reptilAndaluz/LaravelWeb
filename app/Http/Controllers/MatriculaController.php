@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Alumno;
 use App\Models\Matricula;
 use App\Models\Modulo;
+use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
@@ -65,7 +66,12 @@ class MatriculaController extends Controller
         try {
             $matricula->save();
 
-            return redirect()->route('matricula.create')->with(['success' => 'Se ha matriculado el alumno correctamente']);
+            // return redirect()->route('matricula.create')->with(['success' => 'Se ha matriculado el alumno correctamente']);
+            return back()->with(['success' => 'Se ha matriculado correctamente']);
+        } catch (UniqueConstraintViolationException $e) {
+            return back()->withInput()->withErrors([
+                'error' => 'El alumno ya está matriculado en este módulo para el curso actual.',
+            ]);
         } catch (\Exception $e) {
             return back()->withInput()->withErrors([
                 'error' => 'Error al matricular.',

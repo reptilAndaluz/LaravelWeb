@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Alumno;
 use App\Models\Modulo;
-use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Http\RedirectResponse;
@@ -83,12 +82,15 @@ class AlumnoController extends Controller
 
     public function matricular(Alumno $alumno): View
     {
-        $curso = Carbon::now()->month >= 9 ? Carbon::now()->year : Carbon::now()->year - 1;
+        $curso = $this->getCurso();
+        $matriculadosIds = $alumno->matriculas()->where('curso', $curso)->pluck('modulo_id')->toArray();
 
         return view('alumno.matricular', [
             'alumno' => $alumno,
-            'curso_escolar' => $curso.'-'.($curso + 1),
+            'curso_escolar' => $this->getCursoEscolar(),
             'modulos' => Modulo::pluck('nombre', 'id'),
+            'matriculadosIds' => $matriculadosIds,
+            'matriculasActuales' => $alumno->matriculas()->where('curso', $curso)->with('modulo')->get(),
         ]);
     }
 
