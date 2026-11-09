@@ -84,11 +84,12 @@ class AlumnoController extends Controller
     {
         $curso = $this->getCurso();
         $matriculadosIds = $alumno->matriculas()->where('curso', $curso)->pluck('modulo_id')->toArray();
-
+        
         return view('alumno.matricular', [
             'alumno' => $alumno,
             'curso_escolar' => $this->getCursoEscolar(),
             'modulos' => Modulo::pluck('nombre', 'id'),
+            'modulos_completos'=> Modulo::orderBy('nombre','asc')->get(),
             'matriculadosIds' => $matriculadosIds,
             'matriculasActuales' => $alumno->matriculas()->where('curso', $curso)->with('modulo')->get(),
         ]);

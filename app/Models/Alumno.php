@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Alumno extends Model
@@ -17,5 +18,9 @@ class Alumno extends Model
 
     public function matriculas(): HasMany {
         return $this->hasMany(Matricula::class);
+    }
+
+    public function modulos(): BelongsToMany {
+        return $this->belongsToMany(Modulo::class, 'matricula');
     }
 }
