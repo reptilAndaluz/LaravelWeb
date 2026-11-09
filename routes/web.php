@@ -26,7 +26,11 @@ Route::delete('alumno/{alumno}', [AlumnoController::class, 'destroy'])->name('al
 Route::resource('alumno', AlumnoController::class);
 Route::resource('modulo', ModuloController::class);
 Route::get('alumno/{alumno}/matricular', [AlumnoController::class, 'matricular'])->name('alumno.matricular');
+Route::get('modulo/{modulo}/matricular', [ModuloController::class, 'matricular'])->name('modulo.matricular');
 Route::post('matricula/{alumno}/make', [MatriculaController::class, 'make'])->name('matricula.make');
 Route::post('matricula/storemodules', [MatriculaController::class, 'storeModules'])->name('matricula.storemodules');
+Route::post('matricula/storealumnos', [MatriculaController::class, 'storeAlumnos'])->name('matricula.storealumnos');
+Route::post('modulo/storealumnos', [MatriculaController::class, 'storeAlumnos'])->name('modulo.storealumnos');
+Route::post('modulo/{modulo}/matricular', [MatriculaController::class, 'storeAlumnos'])->name('modulo.matricular.post');
 Route::resource('profesor', ProfesorController::class);
 Route::resource('matricula', MatriculaController::class);

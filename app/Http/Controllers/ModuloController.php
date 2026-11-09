@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Alumno;
 use App\Models\Modulo;
 use Exception;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 use Throwable;
 
 class ModuloController extends Controller
@@ -118,5 +120,22 @@ class ModuloController extends Controller
                 ['error' => 'No se pudo eliminar el módulo.']
             );
         }
+    }
+
+
+    public function matricular(Modulo $modulo): View
+    {
+        $curso = $this->getCurso();
+        $matriculadosIds = $modulo->matriculas()->where('curso', $curso)->pluck('alumno_id')->toArray();
+        $alumnos = Alumno::orderBy('apellidos')->orderBy('nombre')->get();
+        
+        return view('modulo.matricular', [
+            'modulo' => $modulo,
+            'curso_escolar' => $this->getCursoEscolar(),
+            'alumnos' => $alumnos,
+            'alumnos_completos' => $alumnos,
+            'matriculadosIds' => $matriculadosIds,
+            'matriculasActuales' => $modulo->matriculas()->where('curso', $curso)->with('alumno')->get(),
+        ]);
     }
 }

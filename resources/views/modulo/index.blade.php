@@ -34,6 +34,7 @@
                         <td>
                             <a href="{{ route('modulo.show', $modulo) }}" class="btn btn-secondary">View</a>
                             <a href="{{ route('modulo.edit', $modulo) }}" class="btn btn-secondary">Edit</a>
+                            <a href="{{ route('modulo.matricular', $modulo) }}" class="btn btn-secondary">Matricular</a>
                             <form data-message="{{ $modulo->nombre }}" class="confirm-dialog" action="{{ route('modulo.destroy', $modulo) }}" method="post" style="display: inline;">
                                 @csrf
                                 @method('delete')

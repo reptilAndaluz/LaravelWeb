@@ -27,6 +27,7 @@
                 <div class="card-body">
                     <h4 class="card-title">{{ $modulo->horas }}h</h4>
                     <h4 class="card-title">{{ $modulo->creditos }} créditos</h4>
+                    <a href="{{ route('modulo.matricular', $modulo) }}" class="btn btn-secondary">Matricular</a>
                     <a href="{{ route('modulo.index') }}" class="btn btn-secondary">Back</a>
                     <a href="{{ url()->previous() }}" class="btn btn-secondary">Back</a>
                 </div>

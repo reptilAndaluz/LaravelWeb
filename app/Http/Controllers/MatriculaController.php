@@ -80,22 +80,62 @@ class MatriculaController extends Controller
         }
     }
 
-    public function storeModules(Request $request):RedirectResponse{
-        $curso =$this->getCurso();
-        $alumno_id=$request->alumno_id;
-        $modulos_id = $request->modulo_id;
-
-        $registrosBorrados = Matricula::where('alumno_id', $alumno_id)->whereNotIn('modulo_id', $modulos_id)->delete();
-        $contador=0;
-        foreach($modulos_id as $modulo_id){
-            $contador += Matricula::insertOrIgnore([
-                    'alumno_id' => $alumno_id,
-                    'modulo_id' => $moduloId,
-                    'curso' => $curso,
-                ]);
-        return back()->with(['success' => "Se ha matriculado correctamente. Se han insertado $contador matrículas y se han borrado $registrosBorrados matrículas."]);
+    public function storeModules(Request $request): RedirectResponse
+    {
+        $curso = $this->getCurso();
+        $alumno_id = $request->alumno_id;
+        $modulos_id = $request->input('modulos', $request->input('modulo_id', []));
+        if (!is_array($modulos_id)) {
+            $modulos_id = $modulos_id ? (array)$modulos_id : [];
         }
-        
+
+        if (empty($modulos_id)) {
+            $registrosBorrados = Matricula::where('alumno_id', $alumno_id)->where('curso', $curso)->delete();
+        } else {
+            $registrosBorrados = Matricula::where('alumno_id', $alumno_id)->where('curso', $curso)->whereNotIn('modulo_id', $modulos_id)->delete();
+        }
+
+        $contador = 0;
+        foreach ($modulos_id as $moduloId) {
+            $contador += Matricula::insertOrIgnore([
+                'alumno_id' => $alumno_id,
+                'modulo_id' => $moduloId,
+                'curso' => $curso,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+
+        return back()->with(['success' => "Se ha matriculado correctamente. Se han insertado $contador matrículas y se han borrado $registrosBorrados matrículas."]);
+    }
+
+    public function storeAlumnos(Request $request, ?Modulo $modulo = null): RedirectResponse
+    {
+        $curso = $this->getCurso();
+        $modulo_id = $modulo?->id ?? $request->modulo_id;
+        $alumnos_id = $request->input('alumnos', $request->input('alumno_id', []));
+        if (!is_array($alumnos_id)) {
+            $alumnos_id = $alumnos_id ? (array)$alumnos_id : [];
+        }
+
+        if (empty($alumnos_id)) {
+            $registrosBorrados = Matricula::where('modulo_id', $modulo_id)->where('curso', $curso)->delete();
+        } else {
+            $registrosBorrados = Matricula::where('modulo_id', $modulo_id)->where('curso', $curso)->whereNotIn('alumno_id', $alumnos_id)->delete();
+        }
+
+        $contador = 0;
+        foreach ($alumnos_id as $alumnoId) {
+            $contador += Matricula::insertOrIgnore([
+                'alumno_id' => $alumnoId,
+                'modulo_id' => $modulo_id,
+                'curso' => $curso,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+
+        return back()->with(['success' => "Se ha matriculado correctamente. Se han insertado $contador matrículas y se han borrado $registrosBorrados matrículas."]);
     }
 
         
